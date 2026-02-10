@@ -2,12 +2,13 @@ package tactify_kafka
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
 	kafkaConfig "github.com/imadeddine-belkat/tactify-kafka/config"
 	"github.com/segmentio/kafka-go"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 type Producer struct {
@@ -53,7 +54,12 @@ func (p *Producer) Close() error {
 
 func (p *Producer) PublishWithProcess(ctx context.Context, model any, topic string, key []byte) error {
 
-	out, err := json.Marshal(model)
+	m, ok := model.(proto.Message)
+	if !ok {
+		return fmt.Errorf("model does not implement proto.Message")
+	}
+
+	out, err := protojson.Marshal(m)
 	if err != nil {
 		return fmt.Errorf("failed to marshal model: %v for topic: %s", err, topic)
 	}
