@@ -1,6 +1,6 @@
 version: 1
 
-kafka:
+tactify-kafka:
   defaults:
     replication: 1
 

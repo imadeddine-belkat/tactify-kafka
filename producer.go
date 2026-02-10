@@ -3,6 +3,7 @@ package tactify_kafka
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	kafkaConfig "github.com/imadeddine-belkat/tactify-kafka/config"
@@ -40,6 +41,9 @@ func NewProducer() *Producer {
 }
 
 func (p *Producer) Publish(ctx context.Context, topic string, key, value []byte) error {
+	if topic == "" {
+		return fmt.Errorf("kafka topic is empty")
+	}
 	return p.writer.WriteMessages(ctx, kafka.Message{
 		Topic: topic,
 		Key:   key,
@@ -66,10 +70,11 @@ func (p *Producer) PublishWithProcess(ctx context.Context, model any, topic stri
 
 	err = p.Publish(ctx, topic, key, out)
 	if err != nil {
-		fmt.Errorf("failed to publish with delete: %v", err)
-	} else {
-		fmt.Printf("Published message to topic %s with key %s\n", topic, string(key))
+		log.Printf("KAFKA ERROR: failed to publish: %v", err)
+		return err
 	}
 
+	// This helps verify progress in the console
+	fmt.Printf("Successfully buffered message for topic %s with key %s\n", topic, string(key))
 	return nil
 }
