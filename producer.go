@@ -57,13 +57,17 @@ func (p *Producer) Close() error {
 }
 
 func (p *Producer) PublishWithProcess(ctx context.Context, model any, topic string, key []byte) error {
+	marshaler := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
+	}
 
 	m, ok := model.(proto.Message)
 	if !ok {
 		return fmt.Errorf("model does not implement proto.Message")
 	}
 
-	out, err := protojson.Marshal(m)
+	out, err := marshaler.Marshal(m)
 	if err != nil {
 		return fmt.Errorf("failed to marshal model: %v for topic: %s", err, topic)
 	}
