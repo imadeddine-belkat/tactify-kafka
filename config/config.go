@@ -31,7 +31,7 @@ type KafkaConfig struct {
 type TopicsConfig struct {
 	Kafka struct {
 		Topics Topics `yaml:"topics"`
-	} `yaml:"kafka"`
+	} `yaml:"tactify-kafka"`
 }
 type Topic struct {
 	Name       string `yaml:"name"`
@@ -115,9 +115,9 @@ type ConsumersGroupID struct {
 func LoadConfig() *KafkaConfig {
 	_, filename, _, _ := runtime.Caller(0)
 
-	// kafka/config/
+	// tactify-kafka/config/
 	configDir := filepath.Dir(filename)
-	// project root (kafka/)
+	// project root (tactify-kafka/)
 	rootDir := filepath.Dir(configDir)
 
 	// Load .env
@@ -127,7 +127,7 @@ func LoadConfig() *KafkaConfig {
 	cfg := &KafkaConfig{}
 
 	if err := envconfig.Process("", cfg); err != nil {
-		log.Fatalf("kafka: unable to load env config: %v", err)
+		log.Fatalf("tactify-kafka: unable to load env config: %v", err)
 	}
 
 	// Load topics.yaml
@@ -135,12 +135,12 @@ func LoadConfig() *KafkaConfig {
 
 	data, err := os.ReadFile(topicsPath)
 	if err != nil {
-		log.Fatalf("kafka: unable to read topics.yaml at %s: %v", topicsPath, err)
+		log.Fatalf("tactify-kafka: unable to read topics.yaml at %s: %v", topicsPath, err)
 	}
 
 	var topicsCfg TopicsConfig
 	if err := yaml.Unmarshal(data, &topicsCfg); err != nil {
-		log.Fatalf("kafka: unable to parse topics.yaml: %v", err)
+		log.Fatalf("tactify-kafka: unable to parse topics.yaml: %v", err)
 	}
 
 	cfg.TopicsName = topicsCfg.Kafka.Topics

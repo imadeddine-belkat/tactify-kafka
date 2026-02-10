@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-BOOTSTRAP_SERVER=kafka:29092
+BOOTSTRAP_SERVER=tactify-kafka:29092
 TOPICS_FILE=/config/topics.yaml
 MAX_RETRIES=30
 
@@ -18,7 +18,7 @@ fi
 # 2. WAIT FOR KAFKA
 echo "Waiting for Kafka to be ready at $BOOTSTRAP_SERVER..."
 for i in $(seq 1 $MAX_RETRIES); do
-  if kafka-topics --bootstrap-server "$BOOTSTRAP_SERVER" --list >/dev/null 2>&1; then
+  if tactify-kafka-topics --bootstrap-server "$BOOTSTRAP_SERVER" --list >/dev/null 2>&1; then
     echo "Kafka is ready!"
     break
   fi
@@ -35,8 +35,8 @@ echo "Reading topics from $TOPICS_FILE..."
 
 # FIX: We use join(" ") instead of string interpolation to ensure clean output
 yq -r '
-  .kafka.defaults.replication as $default_rep |
-  .kafka.topics[] |
+  .tactify-kafka.defaults.replication as $default_rep |
+  .tactify-kafka.topics[] |
   [.name, .partitions, (.replication // $default_rep)] | join(" ")
 ' "$TOPICS_FILE" | \
 while read -r NAME PARTITIONS REPLICATION; do
@@ -46,7 +46,7 @@ while read -r NAME PARTITIONS REPLICATION; do
 
   echo "Processing topic: $NAME (Partitions: $PARTITIONS, Replication: $REPLICATION)"
 
-  kafka-topics \
+  tactify-kafka-topics \
     --bootstrap-server "$BOOTSTRAP_SERVER" \
     --create \
     --if-not-exists \

@@ -1,11 +1,11 @@
-package kafka
+package tactify_kafka
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/imadeddine-belkat/kafka/config"
+	"github.com/imadeddine-belkat/tactify-kafka/config"
 	"github.com/segmentio/kafka-go"
 )
 
@@ -23,7 +23,7 @@ func NewConsumer(cfg *config.KafkaConfig, topic string, groupID string) *Consume
 			MaxBytes:       10e6,                   // Keep: Max 10MB per fetch
 			MaxWait:        100 * time.Millisecond, // Added: Max wait time 100ms
 			CommitInterval: time.Second,            // Added: Auto-commit every second
-			StartOffset:    kafka.LastOffset,       // Added: Start from latest (or use kafka.FirstOffset for all messages)
+			StartOffset:    kafka.LastOffset,       // Added: Start from latest (or use tactify-kafka.FirstOffset for all messages)
 		}),
 	}
 }

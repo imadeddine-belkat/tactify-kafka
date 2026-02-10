@@ -1,4 +1,4 @@
-package kafka
+package tactify_kafka
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	kafkaConfig "github.com/imadeddine-belkat/kafka/config"
+	kafkaConfig "github.com/imadeddine-belkat/tactify-tactify-kafka/config"
 	"github.com/segmentio/kafka-go"
 )
 
