@@ -1,4 +1,4 @@
-module github.com/imadeddine-belkat/kafka
+module github.com/imadeddine-belkat/tactify-kafka
 
 go 1.25
 
