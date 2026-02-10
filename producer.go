@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	kafkaConfig "github.com/imadeddine-belkat/tactify-tactify-kafka/config"
+	kafkaConfig "github.com/imadeddine-belkat/tactify-kafka/config"
 	"github.com/segmentio/kafka-go"
 )
 
