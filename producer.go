@@ -36,6 +36,9 @@ func NewProducer() *Producer {
 			RequiredAcks: acks,
 			BatchSize:    cfg.KafkaBatchSize,
 			BatchTimeout: time.Duration(cfg.KafkaLingerMs) * time.Millisecond,
+			WriteTimeout: 10 * time.Second,
+			ReadTimeout:  10 * time.Second,
+			MaxAttempts:  3,
 		},
 	}
 }
